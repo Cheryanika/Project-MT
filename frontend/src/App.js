@@ -1,11 +1,12 @@
 import React from "react";
+import "./App.css";
 
 function App() {
   return (
     <div>
       <div className="text-center" style={{ backgroundColor: "#3B270C" }}>
         <br />
-        <img src="/frontend/src/Image/rmutl.webp" weight={82} height={150} />
+        <img src="\image\rmutl.webp" weight={82} height={150} />
         <p className="text-light" style={{ fontSize: 35 }}>
           แปลบทคัดย่อภาษาไทย-อังกฤษ <br />
           Abstract Translation Thai-English{" "}

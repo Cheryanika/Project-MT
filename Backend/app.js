@@ -23,14 +23,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// create
-// app.post("/create/test", async (req, res) => {
-//   const data = req.body;
-//   // await User.add({ data });
-//   res.send({ msg: "User Added" });
-//   console.log("Upload to db")
-// });
-
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });

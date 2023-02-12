@@ -1,11 +1,19 @@
 require("dotenv").config();
+require("./config/database").connect();
 
 const express = require("express");
+const bodyParser = require("body-parser");
+// const cors = require("cors");
+// const User = require("./models/HuggingFace");
 const app = express();
 
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
 global.__basedir = __dirname;
+
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*"),
@@ -14,6 +22,14 @@ app.use((req, res, next) => {
     );
   next();
 });
+
+// create
+// app.post("/create/test", async (req, res) => {
+//   const data = req.body;
+//   // await User.add({ data });
+//   res.send({ msg: "User Added" });
+//   console.log("Upload to db")
+// });
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

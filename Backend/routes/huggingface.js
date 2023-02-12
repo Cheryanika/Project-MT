@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
+// const express = require("express");
+// const router = express.Router();
 
-const HuggingFaceController = require("../controllers/HuggingFace");
+// const HuggingFaceController = require("../controllers/HuggingFace");
 
-router.get("/show", HuggingFaceController.showallcourse);
+// router.get("/show", HuggingFaceController.showallcourse);
 
-module.exports = router;
+// module.exports = router;

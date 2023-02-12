@@ -1,18 +1,19 @@
-import React from "react";
-import "./App.css";
-
+import image from "./image/rmutl.webp";
 function App() {
   return (
-    <div>
-      <div className="text-center" style={{ backgroundColor: "#3B270C" }}>
-        <br />
-        <img src="\image\rmutl.webp" weight={82} height={150} />
-        <p className="text-light" style={{ fontSize: 35 }}>
+    <>
+      <div>
+      <nav className="text-center text-light" style={{ backgroundColor: "#3B270C", fontSize: 35 }}>
+          <br />
+          <img src={image} weight={82} height={150} />
+          <br />
           แปลบทคัดย่อภาษาไทย-อังกฤษ <br />
-          Abstract Translation Thai-English{" "}
-        </p>
-      </div>
+          Abstract Translation Thai-English
+          <br /><br />
+          {" "}
+      </nav>
       <div className="container">
+        <br />
         <p className="text-dark" style={{ fontSize: 25 }}>
           {" "}
           ภาษาไทย (Thai)
@@ -76,7 +77,8 @@ function App() {
         style={{ backgroundColor: "#3B270C", height: 80 }}
       />
     </div>
+    </>
   );
-}
+  }
 
 export default App;

@@ -49,6 +49,7 @@ function App() {
         <br />
         <br />
         <button
+          id = "transalation"
           type="button"
           className="btn-custom btn-lg"
           style={{ maxWidth: 200, height: 50 }}
@@ -67,6 +68,7 @@ function App() {
           style={{ backgroundColor: "#3B270C", maxWidth: 1300, height: 50 }}
         ></nav>
         <textarea
+          id = "output"
           className="form-control"
           type="text"
           readOnly

@@ -6,9 +6,9 @@ const bodyParser = require("body-parser");
 // const cors = require("cors");
 // const User = require("./models/HuggingFace");
 const app = express();
-
-// const HuggingFaceRoutes = require("./routes/HuggingfaceRoutes");
-// const HuggingFaceController = require("./controller/HuggingfaceController");
+const HuggingFaceRoutes = require("./routes/HuggingFaceRoutes");
+const HuggingFaceController = require("./controllers/HuggingfaceController");
+// const HuggingFaceMiddleware = require("./middleware/HuggingfaceMiddleware");
 
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
@@ -44,26 +44,35 @@ app.use((req, res, next) => {
 // const data = await response.json();
 // return data;
 
-async function translateWord(data) {
-  var data = { inputs: `${"inputs"} ` };
-  const response = await fetch(
-    `https://api-inference.huggingface.co/models/SigmarAI/mt5-sentence-translator`,
-    {
-      headers: {
-        Authorization: "Bearer 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",
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-    }
-  );
-  data = await response.json();
-  // data = query({ inputs: "The Output: " }).then((response) => {
-  // });
-  console.log(JSON.stringify(response));
-  return data;
-}
+// async function translateWord(data, req, res) {
+//   // รับค่า Input
+// var data = { inputs: `${"งานวิจัยนี้ศึกษาเกี่ยวกับการแปลภาษา"} ` };
+//   var data = bodyParser.data;
+//   // var data = { "สวัสดีวันอังคาร"}
+//   const response = await fetch(
+//     `https://api-inference.huggingface.co/models/SigmarAI/mt5-sentence-translator`,
+//     {
+//       headers: {
+//         Authorization: "Bearer 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",
+//       },
+//       method: "POST",
+//       body: JSON.stringify(data),
+//     }
+//   );
 
-app.use("/api/word", translateWord);
+//   data = await response.json().then((response) => {
+//     console.log(JSON.stringify(response));
+//   });
+//   return data;
+// }
+
+// query({ inputs: "The answer to the universe is" }).then((response) => {
+//   console.log(JSON.stringify(response));
+// });
+
+// app.use("/api/word", translateWord);
+// app.use("/api/word", HuggingFaceMiddleware);
+app.use("/api/word", HuggingFaceRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

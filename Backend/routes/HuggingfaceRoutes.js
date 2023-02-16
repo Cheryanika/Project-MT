@@ -1,8 +1,7 @@
-// const express = require("express");
-// const router = express.Router();
+const express = require("express");
+const HuggingFaceController = require("../controllers/HuggingfaceController");
+const router = express.Router();
 
-// const HuggingFaceController = require("../controller/HuggingfaceController");
+router.post("/translate", HuggingFaceController.translateWording);
 
-// router.post("/translate", HuggingFaceController);
-
-// module.exports = router;
+module.exports = router;

@@ -1,6 +1,34 @@
+import React, { useState} from 'react'
 import image from "./Image/rmutl.webp";
+//import firebase from "./Flie/firebase";
 
 function App() {
+
+ const [translate, setTranslate] = useState({
+    input: '',
+    output: '',
+    term: false
+  })
+
+  const handleChange = e => {
+    const { target } = e;
+    const { name } = target;
+    const value = name === 'term' ? target.checked : target.value;
+
+    setTranslate({
+      ...translate,
+      [name]: value
+    });
+  }
+
+  const Translate = () =>{
+    //const TranslateRef = firebase.database().ref('Translate');
+    const Translate = {
+      translate,
+      complete: false,
+    };
+  }
+
   return (
     <>
       <div>
@@ -40,11 +68,12 @@ function App() {
             </div>
           </nav>
           <textarea
-            id="input"
             className="form-control"
-            type="text"
+            type="input"
             placeholder="กรุณาใส่บทคัดย่อภาษาไทย"
             style={{ maxWidth: 1300 }}
+            name="input"
+            onChange={handleChange}
             defaultValue={""}
           />
         </div>
@@ -71,10 +100,10 @@ function App() {
             style={{ backgroundColor: "#3B270C", maxWidth: 1300, height: 50 }}
           ></nav>
           <textarea
-            id="output"
             className="form-control"
-            type="text"
+            type="output"
             readOnly
+            name="output"
             style={{ maxWidth: 1300 }}
             defaultValue={""}
           />

@@ -1,33 +1,35 @@
 import React, { useState } from "react";
 import image from "./Image/rmutl.webp";
-//import firebase from "./Flie/firebase";
+import {database} from "./firebase";
+import { setDoc, doc } from "firebase/firestore";
 
 function App() {
-  const [translate, setTranslate] = useState({
-    input: "",
-    output: "",
-    term: false,
-  });
+  const[thai, setThai] = useState("");
+  const[eng, setEng] = useState("");
+  const[machine, setMachine] = useState("");
 
-  const handleChange = (e) => {
-    const { target } = e;
-    const { name } = target;
-    const value = name === "term" ? target.checked : target.value;
+  const addingdata = async (e) => {
+    e.preventDefault();
 
-    setTranslate({
-      ...translate,
-      [name]: value,
-    });
-  };
-
-  const Translate = () => {
-    //const TranslateRef = firebase.database().ref('Translate');
-    const Translate = {
-      translate,
-      complete: false,
+    const docData = {
+      Machine:machine,
+      Thai:thai,
+      English:eng
     };
-  };
+    let objectDate = new Date();  
+    let day = objectDate.getDate();   
+    let month = objectDate.getMonth();   
+    let year = objectDate.getFullYear();  
+    let full = day.toString() + month.toString() + year.toString() ;
 
+    let m = objectDate.getMinutes();
+    let h = objectDate.getHours();
+    let sc =objectDate.getSeconds();
+    let time = h.toString() +m.toString() +sc.toString() ;
+
+    await setDoc(doc(database, "Translation", "Date-" + full + "-" + time), docData);
+    console.log("Document Added")
+  }
   return (
     <>
       <div>
@@ -36,7 +38,7 @@ function App() {
           style={{ backgroundColor: "#3B270C", fontSize: 35 }}
         >
           <br />
-          <img src={image} weight={82} height={150} />
+          <img src={image} weight={82} height={150} alt={image}/>
           <br />
           แปลบทคัดย่อภาษาไทย-อังกฤษ <br />
           Abstract Translation Thai-English
@@ -55,24 +57,22 @@ function App() {
           >
             <div className="container">
               <select
-                id="selection"
                 className="form-select form-select-sm"
                 aria-label=".form-select-sm"
+                onChange={(e) => setMachine(e.target.value)}
               >
                 <option selected>กรุณาเลือก Machine Translation Model</option>
-                <option value={1}>mt5 model</option>
-                <option value={2}>mBART model</option>
-                <option value={3}>Marian model</option>
+                <option value={"mt5"}>mt5 model</option>
+                <option value={"mBART"}>mBART model</option>
+                <option value={"Marian"}>Marian model</option>
               </select>
             </div>
           </nav>
           <textarea
             className="form-control"
-            type="input"
             placeholder="กรุณาใส่บทคัดย่อภาษาไทย"
             style={{ maxWidth: 1300 }}
-            name="input"
-            onChange={handleChange}
+            onChange={(e) => setThai(e.target.value)}
             defaultValue={""}
           />
         </div>
@@ -80,9 +80,9 @@ function App() {
           <br />
           <br />
           <button
-            id="transalation"
-            type="button"
+            type="submit"
             className="btn-custom btn-lg"
+            onClick={addingdata}
             style={{ maxWidth: 200, height: 50 }}
           >
             แปลภาษา
@@ -100,10 +100,9 @@ function App() {
           ></nav>
           <textarea
             className="form-control"
-            type="output"
             readOnly
-            name="output"
             style={{ maxWidth: 1300 }}
+            onChange={(e) => setEng(e.target.value)}
             defaultValue={""}
           />
           <br />

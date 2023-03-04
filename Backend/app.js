@@ -13,11 +13,11 @@ const db = admin.firestore();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Create Data in firebase
+// Create Data in Firebase
+// Path: http://localhost:8000/create/translator
 app.post("/create/translator", async (req, res) => {
   try {
     console.log(req.body);
-    // const id = req.body.English;
     const translatorJson = {
       English: req.body.English,
       Model: req.body.Model,
@@ -25,6 +25,22 @@ app.post("/create/translator", async (req, res) => {
     };
     const response = db.collection("TranslatorData").add(translatorJson);
     res.send(response);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+
+// Function Read data all in db
+app.get("/read/all", async (req, res) => {
+  try {
+    const translatorRef = db.collection("TranslatorData");
+    const response = await translatorRef.get();
+    let responseArr = [];
+    response.forEach((doc) => {
+      responseArr.push(doc.data());
+    });
+    res.send(responseArr);
   } catch (error) {
     res.send(error);
   }

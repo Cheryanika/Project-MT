@@ -1,6 +1,13 @@
 const express = require("express");
 const app = express();
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"),
+    res.setHeader("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
+
 const admin = require("firebase-admin");
 const credentials = require("./key.json");
 
@@ -18,18 +25,30 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/create/translator", async (req, res) => {
   try {
     console.log(req.body);
+    let objectDate = new Date();
+    let day = objectDate.getDate();
+    let month = objectDate.getMonth() + 1;
+    let year = objectDate.getFullYear();
+    let full = day.toString() + month.toString() + year.toString() ;
+
+    let m = objectDate.getMinutes();
+    let h = objectDate.getHours();
+    let sc =objectDate.getSeconds();
+    let time = h.toString() +m.toString() +sc.toString() ;
+
+    const id = "Date"+ "-" + full + "-" + time;
     const translatorJson = {
-      English: req.body.English,
-      Model: req.body.Model,
+      Machine: req.body.Machine,
       Thai: req.body.Thai,
+      English: req.body.English,
     };
-    const response = db.collection("TranslatorData").add(translatorJson);
+
+    const response = db.collection("TranslatorData").doc(id).set(translatorJson);
     res.send(response);
   } catch (error) {
     res.send(error);
   }
 });
-
 
 // Function Read data all in db
 app.get("/read/all", async (req, res) => {

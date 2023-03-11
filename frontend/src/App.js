@@ -1,43 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import image from "./Image/rmutl.webp";
 
 function App() {
-  // const[thai, setThai] = useState("");
-  // const[eng, setEng] = useState("");
-  // const[machine, setMachine] = useState("");
-
-  // const addingdata = async (e) => {
-  //   e.preventDefault();
-
-  //   const docData = {
-  //     Machine:machine,
-  //     Thai:thai,
-  //     English:eng
-  //   };
-  //   let objectDate = new Date();
-  //   let day = objectDate.getDate();
-  //   let month = objectDate.getMonth();
-  //   let year = objectDate.getFullYear();
-  //   let full = day.toString() + month.toString() + year.toString() ;
-
-  //   let m = objectDate.getMinutes();
-  //   let h = objectDate.getHours();
-  //   let sc =objectDate.getSeconds();
-  //   let time = h.toString() +m.toString() +sc.toString() ;
-
-  //   await setDoc(doc(database, "Translation", "Date-" + full + "-" + time), docData);
-  //   console.log("Document Added")
-  // }
-
   // -------------------------- TASK --------------------------------------------------------------------------------------------
 
   // Get Function API จาก Backend มา --> ทำ Function HuggingFace เรียกใช้งาน
   // เมื่อ Function HuggingFace ทำงาน แปล translate success -> Will be store in Database -> Show the Output.
 
   // ----------------------------------------------------------------------------------------------------------------------------
-
-  function translator(e) {
+  function translator() {
     translatorWord();
+    createData();
   }
 
   // Function HuggingFace
@@ -62,8 +35,25 @@ function App() {
     // return result;
   }
 
-  // --------------------- TIP ----------------
-  // ทำ CSS แยก class ก็ดีน่ะ Code จะได้ดู Clean
+  // Function CreateData
+  function createData() {
+    let url = "http://localhost:8000/create/translator"
+    var Machine = document.getElementById("select_text").value;
+    var Thai = document.getElementById("input_text").value;
+    var English = document.getElementById("result").value;
+
+    fetch(url,{
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        Machine: Machine,
+        Thai: Thai,
+        English: English,}),
+    })
+    .then((response) => response.json())       
+    }
 
   return (
     <>
@@ -92,9 +82,9 @@ function App() {
           >
             <div className="container">
               <select
+                id="select_text"
                 className="form-select form-select-sm"
                 aria-label=".form-select-sm"
-                // onChange={(e) => setMachine(e.target.value)}
               >
                 <option selected>กรุณาเลือก Machine Translation Model</option>
                 <option value={"mt5"}>mt5 model</option>
@@ -104,11 +94,10 @@ function App() {
             </div>
           </nav>
           <textarea
+            id="input_text"
             className="form-control"
             placeholder="กรุณาใส่บทคัดย่อภาษาไทย"
             style={{ maxWidth: 1300 }}
-            // onChange={(e) => setThai(e.target.value)}
-            defaultValue={""}
           />
         </div>
         <div className="text-center">
@@ -118,10 +107,9 @@ function App() {
             type="submit"
             class="get_values"
             className="btn-custom btn-lg"
-            // onClick={addingdata}
-            
+
             // Call function translator มาใช้
-            onClick="translator()"
+            onClick={translator}
             style={{ maxWidth: 200, height: 50 }}
           >
             แปลภาษา
@@ -138,11 +126,11 @@ function App() {
             style={{ backgroundColor: "#3B270C", maxWidth: 1300, height: 50 }}
           ></nav>
           <textarea
+            id="result"
             className="form-control"
             readOnly
             style={{ maxWidth: 1300 }}
-            // onChange={(e) => setEng(e.target.value)}
-            defaultValue={""}
+            
           />
           <br />
         </div>

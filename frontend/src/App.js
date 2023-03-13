@@ -9,30 +9,28 @@ function App() {
 
   // ----------------------------------------------------------------------------------------------------------------------------
   function translator() {
-    translatorWord();
-    createData();
+    translatorMBART();
+    setTimeout(() => {
+      createData();
+    }, 60000);
+    //createData();
   }
 
-  // Function HuggingFace
-  function translatorWord() {
-    let url = "https://api-inference.huggingface.co/models/SigmarAI/MBART";
-    var text = document.getElementById("input_text").value;
-
-    fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ data: [text] }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        let textArea = document.getElementById("result");
-        // parsing the JSON value to string
-        textArea.value = JSON.stringify(data);
-      });
-    // const result = await response.json();
-    // return result;
+  function translatorMBART() {
+    var text = document.getElementById("input_text").value
+    var data = text.split(" ")
+    fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART",
+      {
+        headers: { Authorization: "Bearer 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" },
+        method: "POST",
+        body: JSON.stringify(data),
+      }
+    )
+    .then((response) => response.json())
+    .then((data) => {
+      let textArea = document.getElementById("result");
+      textArea.value = JSON.stringify(data);
+    });
   }
 
   // Function CreateData
@@ -98,6 +96,7 @@ function App() {
             className="form-control"
             placeholder="กรุณาใส่บทคัดย่อภาษาไทย"
             style={{ maxWidth: 1300 }}
+            defaultValue={String}
           />
         </div>
         <div className="text-center">
@@ -130,7 +129,7 @@ function App() {
             className="form-control"
             readOnly
             style={{ maxWidth: 1300 }}
-            
+            defaultValue={String}
           />
           <br />
         </div>

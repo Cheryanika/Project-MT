@@ -51,6 +51,7 @@ app.post("/create/translator", async (req, res) => {
 });
 
 // Function Read data all in db
+// Path: http://localhost:8000/read/all
 app.get("/read/all", async (req, res) => {
   try {
     const translatorRef = db.collection("TranslatorData");

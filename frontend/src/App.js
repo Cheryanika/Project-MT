@@ -2,12 +2,13 @@ import React from "react";
 import image from "./Image/rmutl.webp";
 
 function App() {
-  // -------------------------- TASK --------------------------------------------------------------------------------------------
 
-  // Get Function API จาก Backend มา --> ทำ Function HuggingFace เรียกใช้งาน
-  // เมื่อ Function HuggingFace ทำงาน แปล translate success -> Will be store in Database -> Show the Output.
+  // const [text, settext] = useState('');
 
-  // ----------------------------------------------------------------------------------------------------------------------------
+  // const handleNumChange = e => {
+  //     settext(e.target.value.split(" "))
+  // };
+
   function translator() {
     translatorMBART();
     setTimeout(() => {
@@ -16,24 +17,30 @@ function App() {
     //createData();
   }
 
+  // Function Call API
+
   function translatorMBART() {
-    var text = document.getElementById("input_text").value
-    var data = text.split(" ")
-    fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART",
+    var sentence = document.getElementById("input_text").value
+    var textArea = document.getElementById("result");
+    var data = sentence.split(" ")
+    for(var i = 0; i < data.length; i++) {
+      fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART",
       {
         headers: { Authorization: "Bearer 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" },
         method: "POST",
-        body: JSON.stringify(data),
-      }
-    )
-    .then((response) => response.json())
-    .then((data) => {
-      let textArea = document.getElementById("result");
-      textArea.value = JSON.stringify(data);
-    });
+        body: JSON.stringify(data[i]),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        var generated_text = JSON.stringify(data)
+        generated_text = generated_text.substring(20, generated_text.length - 3) + " "
+        textArea.value += generated_text
+      });
+    }
+    
   }
 
-  // Function CreateData
+  // Function Create Data
   function createData() {
     let url = "http://localhost:8000/create/translator"
     var Machine = document.getElementById("select_text").value;
@@ -72,7 +79,7 @@ function App() {
           <br />
           <p className="text-dark" style={{ fontSize: 25 }}>
             {" "}
-            ภาษาไทย (Thai)
+            ภาษาไทย (Thai) 
           </p>
           <nav
             className="navbar navbar-expand-lg navbar-light"
@@ -83,20 +90,22 @@ function App() {
                 id="select_text"
                 className="form-select form-select-sm"
                 aria-label=".form-select-sm"
-              >
-                <option selected>กรุณาเลือก Machine Translation Model</option>
+                placeholder="กรุณาเลือก Machine Translation Model"
+              > <option>กรุณาเลือก Machine Translation Model</option>
                 <option value={"mt5"}>mt5 model</option>
                 <option value={"mBART"}>mBART model</option>
                 <option value={"Marian"}>Marian model</option>
               </select>
+              {/* <p className="text-light"> จำนวนประโยค:{text.split(" ").length}/10</p> */}
             </div>
           </nav>
           <textarea
             id="input_text"
             className="form-control"
+            defaultValue={String}
             placeholder="กรุณาใส่บทคัดย่อภาษาไทย"
             style={{ maxWidth: 1300 }}
-            defaultValue={String}
+            // onChange={handleNumChange}
           />
         </div>
         <div className="text-center">
@@ -104,7 +113,6 @@ function App() {
           <br />
           <button
             type="submit"
-            class="get_values"
             className="btn-custom btn-lg"
 
             // Call function translator มาใช้

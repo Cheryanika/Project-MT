@@ -39,8 +39,8 @@ app.post("/create/translator", async (req, res) => {
     const id = "Date"+ "-" + full + "-" + time;
     const translatorJson = {
       Machine: req.body.Machine,
-      Thai: req.body.Thai,
-      English: req.body.English,
+      Input: req.body.Input,
+      Output: req.body.Output,
     };
 
     const response = db.collection("TranslatorData").doc(id).set(translatorJson);

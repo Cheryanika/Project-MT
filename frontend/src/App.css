@@ -15,6 +15,12 @@
   box-shadow: 0 0 0 .2rem #997950
 }
 
+.form-select {
+  color: #000000;
+  border-color: #997950;
+  width: 100px;
+}
+
 .form-select-sm {
   color: #000000;
   border-color: #997950;
@@ -29,4 +35,11 @@
 .form-control:focus,
 .form-control.focus {
   box-shadow: 0 0 0 .2rem #997950
+}
+
+img {
+  padding: 25px;
+}
+th{
+  font-weight: normal;
 }

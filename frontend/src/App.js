@@ -1,5 +1,6 @@
 import React,{useState} from "react";
 import image from "./Image/rmutl.webp";
+import API_TOKEN from "./apitoken";
 
 function App() {
 
@@ -7,6 +8,7 @@ function App() {
   const[showtext, setShowtext]= useState("ภาษาไทย (Thai)");
   const[showtext1, setShowtext1]= useState("ภาษาอังกฤษ (English)");
   const[showtext2, setShowtext2]= useState("กรุณาใส่บทคัดย่อภาษาไทย");
+
 
   const handletext=(e)=>{
     var getvalue = document.getElementById('lange_text').value
@@ -34,81 +36,78 @@ function App() {
      }
   }
 
-  //Function Translate and Collect translate data TH-EN
-  function translator2() {
-    getOption2();
-    setTimeout(() => {
-      createData();
-    }, 60000);
-  }
-
     //Function Translate and Collect translate data EN-TH
-    function translator1() {
-      getOption1();
+    function translator() {
+      getOption();
       setTimeout(() => {
         createData();
       }, 60000);
     }
 
-  //Function Select Model Option EN-TH
-  function getOption1() {
+  //Function Select Model Option
+  function getOption() {
     var option = document.getElementById('select_text').value
+    var option2 = document.getElementById('lange_text').value
 
-    if(option === 'MT5') {
-      translatorMT5ENTH()
-    } else if(option === 'MBART') {
-      translatorMBARTENTH()
-    } else if(option === 'Marian') {
-      translatorMarianENTH()
-    }
-  }
-
-  //Function Select Model Option TH-EN
-  function getOption2() {
-    var option = document.getElementById('select_text').value
-
-    if(option === 'MT5') {
-      translatorMT5()
-    } else if(option === 'MBART') {
-      translatorMBART()
-    } else if(option === 'Marian') {
-      translatorMarian()
+    if(option === 'MT5' && option2 === 'th-en') {
+      translatorMT5_TH_EN()
+    }else  if(option === 'MT5' && option2 === 'en-th') {
+      translatorMT5_EN_TH()
+    } else if(option === 'MBART' && option2 === 'th-en') {
+      translatorMBART_TH_EN()
+    } else if(option === 'MBART' && option2 === 'en-th') {
+      translatorMBART_EN_TH()
+    }else if(option === 'Marian' && option2 === 'th-en') {
+      translatorMarian_TH_EN()
+    } else if(option === 'Marian' && option2 === 'en-th') {
+      translatorMarian_EN_TH()
     }
   }
 
     // Function Call API EN-TH
-  function translatorMBARTENTH(){
-    var sentence = document.getElementById("input_text").value
-    var textArea = document.getElementById("result");
-  }
-
-  function translatorMBARTENTH(){
+  function translatorMBART_EN_TH(){
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
   }
   
-  function translatorMT5ENTH(){
+  function translatorMT5_EN_TH(){
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
   }
 
-  function translatorMarianENTH(){
+  function translatorMarian_EN_TH(){
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
   }
 
   // Function Call API TH-EN
-  function translatorMBART() {
+  function translatorMBART_TH_EN() {
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
     textArea.value = ''
     var data = sentence.split(" ")
 
+    // // starting model
+    // fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
+    //   headers: { Authorization: "Bearer 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" },
+    //   method: "POST",
+    //   body: JSON.stringify(data[0]),
+    // })
+    // .then((response) => response.json())
+    // .then((data) => {
+    //   if(!('generated_text' in data[0])){
+    //     console.log('in starting model function')
+    //     textArea.value = 'loading model...'
+    //     setTimeout(console.log('starting model', 60000))
+    //     textArea.value = ''
+    //   }
+    // })
+    
     for(var i = 0; i < data.length; i++) {
       textArea.value = textArea.value.slice(0, -20)
       fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART",
       {
-        headers: { Authorization: "Bearer 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" },
+        headers: { Authorization: `Bearer ${API_TOKEN}` },
         method: "POST",
         body: JSON.stringify(data[i])
       })
@@ -145,34 +144,18 @@ function App() {
     }
   }
 
-  function translatorMT5() {
+  function translatorMT5_TH_EN() {
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
     textArea.value = ''
     var data = sentence.split(" ")
 
-    // // starting model
-    // fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
-    //   headers: { Authorization: "Bearer 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" },
-    //   method: "POST",
-    //   body: JSON.stringify(data[0]),
-    // })
-    // .then((response) => response.json())
-    // .then((data) => {
-    //   if(!('generated_text' in data[0])){
-    //     console.log('in starting model function')
-    //     textArea.value = 'loading model...'
-    //     setTimeout(console.log('starting model', 60000))
-    //     textArea.value = ''
-    //   }
-    // })
-    
     // translate
     for(var i = 0; i < data.length; i++) {
       textArea.value = textArea.value.slice(0, -20)
       fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5",
       {
-        headers: { Authorization: "Bearer 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" },
+        headers: { Authorization: `Bearer ${API_TOKEN}` },
         method: "POST",
         body: JSON.stringify(data[i])
       })
@@ -209,7 +192,7 @@ function App() {
     }
   }
 
-  function translatorMarian() {
+  function translatorMarian_TH_EN() {
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
     textArea.value = ''
@@ -219,7 +202,7 @@ function App() {
       textArea.value = textArea.value.slice(0, -20)
       fetch("https://api-inference.huggingface.co/models/SigmarAI/Marian",
       {
-        headers: { Authorization: "Bearer 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" },
+        headers: { Authorization: `Bearer ${API_TOKEN}` },
         method: "POST",
         body: JSON.stringify(data[i])
       })
@@ -333,7 +316,7 @@ function App() {
             className="btn-custom btn-lg"
 
             // Call function translator มาใช้
-            onClick={translator1}
+            onClick={translator}
             style={{ maxWidth: 200, height: 50 }}
           >
             แปลภาษา

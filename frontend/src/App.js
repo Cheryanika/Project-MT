@@ -34,17 +34,39 @@ function App() {
      }
   }
 
-  //Function Translate and Collect translate data
-  function translator() {
-    getOption();
+  //Function Translate and Collect translate data TH-EN
+  function translator2() {
+    getOption2();
     setTimeout(() => {
       createData();
     }, 60000);
   }
 
-  //Function Select Model Option
-  function getOption() {
+    //Function Translate and Collect translate data EN-TH
+    function translator1() {
+      getOption1();
+      setTimeout(() => {
+        createData();
+      }, 60000);
+    }
+
+  //Function Select Model Option EN-TH
+  function getOption1() {
     var option = document.getElementById('select_text').value
+
+    if(option === 'MT5') {
+      translatorMT5ENTH()
+    } else if(option === 'MBART') {
+      translatorMBARTENTH()
+    } else if(option === 'Marian') {
+      translatorMarianENTH()
+    }
+  }
+
+  //Function Select Model Option TH-EN
+  function getOption2() {
+    var option = document.getElementById('select_text').value
+
     if(option === 'MT5') {
       translatorMT5()
     } else if(option === 'MBART') {
@@ -54,7 +76,28 @@ function App() {
     }
   }
 
-  // Function Call API
+    // Function Call API EN-TH
+  function translatorMBARTENTH(){
+    var sentence = document.getElementById("input_text").value
+    var textArea = document.getElementById("result");
+  }
+
+  function translatorMBARTENTH(){
+    var sentence = document.getElementById("input_text").value
+    var textArea = document.getElementById("result");
+  }
+  
+  function translatorMT5ENTH(){
+    var sentence = document.getElementById("input_text").value
+    var textArea = document.getElementById("result");
+  }
+
+  function translatorMarianENTH(){
+    var sentence = document.getElementById("input_text").value
+    var textArea = document.getElementById("result");
+  }
+
+  // Function Call API TH-EN
   function translatorMBART() {
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
@@ -77,15 +120,23 @@ function App() {
             textArea.value += data[0].generated_text
             if(data[0].generated_text.slice(-1) === '.') {
               textArea.value += ' '
+            } else if(data[0].generated_text.slice(-1) === ','){
+              textArea.value += ' '
             } else {
               textArea.value += '. '
             }
           }
         } catch (error) {
-          console.error(error)
-          textArea.value = 'starting model...'
-          setTimeout(60000)
-          textArea.value = 'model started please try again...'
+          var timeleft = 30;
+          var downloadTimer = setInterval(function(){
+            if(timeleft <= 0){
+              clearInterval(downloadTimer);
+              textArea.value = 'model started please try again...'
+              } else {
+                textArea.value = 'starting model please try again in... ' + timeleft;
+              }
+            timeleft -= 1;
+          }, 1000);
         }
       });
       if(i !== data.length - 1){
@@ -127,20 +178,29 @@ function App() {
       })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
-        if('generated_text' in data[0]){
-          console.log('translate ' + JSON.stringify(data))
-          textArea.value += data[0].generated_text
-          if(data[0].generated_text.slice(-1) === '.') {
-            textArea.value += ' '
-          } else {
-            textArea.value += '. '
+        try {
+          if('generated_text' in data[0]){
+            console.log(JSON.stringify(data))
+            textArea.value += data[0].generated_text
+            if(data[0].generated_text.slice(-1) === '.') {
+              textArea.value += ' '
+            } else if(data[0].generated_text.slice(-1) === ','){
+              textArea.value += ' '
+            } else {
+              textArea.value += '. '
+            }
           }
-        } else {
-          textArea.value = 'starting model...'
-          console.log('starting model')
-          setTimeout(60000)
-          textArea.value = 'model started please try again...'
+        } catch (error) {
+          var timeleft = 60;
+          var downloadTimer = setInterval(function(){
+            if(timeleft <= 0){
+              clearInterval(downloadTimer);
+              textArea.value = 'model started please try again...'
+              } else {
+                textArea.value = 'starting model please try again in... ' + timeleft;
+              }
+            timeleft -= 1;
+          }, 1000);
         }
       });
       if(i !== data.length - 1){
@@ -171,15 +231,23 @@ function App() {
             textArea.value += data[0].generated_text
             if(data[0].generated_text.slice(-1) === '.') {
               textArea.value += ' '
+            } else if(data[0].generated_text.slice(-1) === ','){
+              textArea.value += ' '
             } else {
               textArea.value += '. '
             }
           }
         } catch (error) {
-          console.error(error)
-          textArea.value = 'starting model...'
-          setTimeout(60000)
-          textArea.value = 'model started please try again...'
+          var timeleft = 30;
+          var downloadTimer = setInterval(function(){
+            if(timeleft <= 0){
+              clearInterval(downloadTimer);
+              textArea.value = 'model started please try again...'
+              } else {
+                textArea.value = 'starting model please try again in... ' + timeleft;
+              }
+            timeleft -= 1;
+          }, 1000);
         }
       });
       if(i !== data.length - 1){
@@ -215,7 +283,7 @@ function App() {
           <table>
             <tr>
               <th><img src={image} weight={82} height={150} alt={image}></img></th>
-              <th class="text-light">แปลภาษาบทคัดย่อภาษาไทย - อังกฤษ<br/>Abstract Translation Thai-English</th><br/><br/>
+              <th className="text-light">แปลภาษาบทคัดย่อภาษาไทย - อังกฤษ<br/>Abstract Translation Thai-English</th><br/><br/>
               <div>
                 <select className="form-select position-absolute right-0 end-0 translate-middle" 
                         id="lange_text"
@@ -265,7 +333,7 @@ function App() {
             className="btn-custom btn-lg"
 
             // Call function translator มาใช้
-            onClick={translator}
+            onClick={translator1}
             style={{ maxWidth: 200, height: 50 }}
           >
             แปลภาษา

@@ -3,17 +3,19 @@ import image from "./Image/rmutl.webp";
 import API_TOKEN from "./apitoken";
 
 function App() {
-
+  
   //Function Select Language Option
   const[showtext, setShowtext]= useState("ภาษาไทย (Thai)");
   const[showtext1, setShowtext1]= useState("ภาษาอังกฤษ (English)");
   const[showtext2, setShowtext2]= useState("กรุณาใส่บทคัดย่อภาษาไทย");
 
-
   const handletext=(e)=>{
     var getvalue = document.getElementById('lange_text').value
     var getlage1 = document.getElementById('lange_text1')
     var getlage2 = document.getElementById('lange_text2')
+    
+    var textarea1 = document.getElementById('input_text')
+    var textarea2 = document.getElementById('result')
      
     if(getvalue==='en-th')
      {
@@ -23,6 +25,8 @@ function App() {
       setShowtext(getlage1);
       setShowtext1(getlage2);
       setShowtext2(show);
+      textarea1.value = '';
+      textarea2.value = '';
      }
 
      else if(getvalue==='th-en')
@@ -33,17 +37,21 @@ function App() {
       setShowtext(getlage1);
       setShowtext1(getlage2);
       setShowtext2(show);
+      textarea1.value = '';
+      textarea2.value = '';
      }
   }
+  
+  // ---------------------------------------------------------------------------------------------------------------------------//
+  //Function Translate and Collect translate data EN-TH
+  function translator() {
+    getOption();
+    setTimeout(() => {
+      createData();
+    }, 150000);
+  }
 
-    //Function Translate and Collect translate data EN-TH
-    function translator() {
-      getOption();
-      setTimeout(() => {
-        createData();
-      }, 60000);
-    }
-
+  // ---------------------------------------------------------------------------------------------------------------------------//
   //Function Select Model Option
   function getOption() {
     var option = document.getElementById('select_text').value
@@ -63,22 +71,193 @@ function App() {
       translatorMarian_EN_TH()
     }
   }
+  // ---------------------------------------------------------------------------------------------------------------------------//
+  // Function Loading Model spinner
+  const loader = document.getElementById("loader");
+  // show loading
+  function displayLoading() {
+    loader.classList.add("display");}
+    
+  // hidden loading
+  function hideLoading() {
+    loader.classList.remove("display");}
 
-    // Function Call API EN-TH
+  // ---------------------------------------------------------------------------------------------------------------------------//
+  // Function Call API EN-TH
   function translatorMBART_EN_TH(){
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
+    textArea.value = ''
+    var data = sentence.split(". ")
+
+    let promises = []; 
+    let i = 0
+    
+    const fn = async() => {
+      while(i < data.length) {
+        promises.push(
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART", {
+            headers: { Authorization: `Bearer ${API_TOKEN}` },
+            method: "POST",
+            body: JSON.stringify(data[i])
+          }).then(response => response.json())
+        )
+        i++
+      }
+      await Promise.all(promises).then(data => {
+        console.log(JSON.stringify(data));
+        hideLoading()
+        for(i = 0; i < data.length; i++) {
+          textArea.value += data[i][0].generated_text + ' '
+        }
+      })
+    }
+    
+    // catch model starting
+    async function query(data) {
+      const response = await fetch(
+        "https://api-inference.huggingface.co/models/SigmarAI/MBART",
+        {
+          headers: { Authorization: `Bearer ${API_TOKEN}` },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await response.json();
+      return result;
+    }
+
+    displayLoading()
+    query('hello').then((response) => {
+      let sample_text = JSON.stringify(response)
+      if(sample_text.match('error')){
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      } else {
+        fn()
+      }
+    });
+
   }
+  // ---------------------------------------------------------------------------------------------------------------------------
   
   function translatorMT5_EN_TH(){
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
-  }
+    textArea.value = ''
+    var data = sentence.split(". ")
 
+    let promises = []; 
+    let i = 0
+    
+    const fn = async() => {
+      while(i < data.length) {
+        promises.push(
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
+            headers: { Authorization: `Bearer ${API_TOKEN}` },
+            method: "POST",
+            body: JSON.stringify(data[i])
+          }).then(response => response.json())
+        )
+        i++
+      }
+      await Promise.all(promises).then(data => {
+        console.log(JSON.stringify(data));
+        hideLoading()
+        for(i = 0; i < data.length; i++) {
+          textArea.value += data[i][0].generated_text + ' '
+        }
+      })
+    }
+    
+    // catch model starting
+    async function query(data) {
+      const response = await fetch(
+        "https://api-inference.huggingface.co/models/SigmarAI/MT5",
+        {
+          headers: { Authorization: `Bearer ${API_TOKEN}` },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await response.json();
+      return result;
+    }
+
+    displayLoading()
+    query('hello').then((response) => {
+      let sample_text = JSON.stringify(response)
+      if(sample_text.match('error')){
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      } else {
+        fn()
+      }
+    });
+  }
+  // ---------------------------------------------------------------------------------------------------------------------------
+  
   function translatorMarian_EN_TH(){
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
+    textArea.value = ''
+    var data = sentence.split(". ")
+
+    let promises = []; 
+    let i = 0
+    
+    const fn = async() => {
+      while(i < data.length) {
+        promises.push(
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/Marian", {
+            headers: { Authorization: `Bearer ${API_TOKEN}` },
+            method: "POST",
+            body: JSON.stringify(data[i])
+          }).then(response => response.json())
+        )
+        i++
+      }
+      await Promise.all(promises).then(data => {
+        console.log(JSON.stringify(data));
+        hideLoading()
+        for(i = 0; i < data.length; i++) {
+          textArea.value += data[i][0].generated_text.replace('▁', '') + ' '
+        }
+      })
+    }
+    
+    // catch model starting
+    async function query(data) {
+      const response = await fetch(
+        "https://api-inference.huggingface.co/models/SigmarAI/Marian",
+        {
+          headers: { Authorization: `Bearer ${API_TOKEN}` },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await response.json();
+      return result;
+    }
+
+    displayLoading()
+    query('hello').then((response) => {
+      let sample_text = JSON.stringify(response)
+      if(sample_text.match('error')){
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      } else {
+        fn()
+      }
+    });
   }
+  // ---------------------------------------------------------------------------------------------------------------------------// 
 
   // Function Call API TH-EN
   function translatorMBART_TH_EN() {
@@ -86,63 +265,64 @@ function App() {
     var textArea = document.getElementById("result");
     textArea.value = ''
     var data = sentence.split(" ")
-
-    // // starting model
-    // fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
-    //   headers: { Authorization: "Bearer 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" },
-    //   method: "POST",
-    //   body: JSON.stringify(data[0]),
-    // })
-    // .then((response) => response.json())
-    // .then((data) => {
-    //   if(!('generated_text' in data[0])){
-    //     console.log('in starting model function')
-    //     textArea.value = 'loading model...'
-    //     setTimeout(console.log('starting model', 60000))
-    //     textArea.value = ''
-    //   }
-    // })
     
-    for(var i = 0; i < data.length; i++) {
-      textArea.value = textArea.value.slice(0, -20)
-      fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART",
-      {
-        headers: { Authorization: `Bearer ${API_TOKEN}` },
-        method: "POST",
-        body: JSON.stringify(data[i])
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        try {
-          if('generated_text' in data[0]){
-            console.log(JSON.stringify(data))
-            textArea.value += data[0].generated_text
-            if(data[0].generated_text.slice(-1) === '.') {
-              textArea.value += ' '
-            } else if(data[0].generated_text.slice(-1) === ','){
-              textArea.value += ' '
-            } else {
-              textArea.value += '. '
-            }
-          }
-        } catch (error) {
-          var timeleft = 30;
-          var downloadTimer = setInterval(function(){
-            if(timeleft <= 0){
-              clearInterval(downloadTimer);
-              textArea.value = 'model started please try again...'
-              } else {
-                textArea.value = 'starting model please try again in... ' + timeleft;
-              }
-            timeleft -= 1;
-          }, 1000);
-        }
-      });
-      if(i !== data.length - 1){
-        textArea.value += ' model predicting...'
+    let promises = []; 
+    let i = 0
+    
+    const fn = async() => {
+      while(i < data.length) {
+        promises.push(
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART", {
+            headers: { Authorization: `Bearer ${API_TOKEN}` },
+            method: "POST",
+            body: JSON.stringify(data[i])
+          }).then(response => response.json())
+        )
+        i++
       }
+      await Promise.all(promises).then(data => {
+        console.log(JSON.stringify(data));
+        hideLoading()
+        for(i = 0; i < data.length; i++) {
+          textArea.value += data[i][0].generated_text
+          if(data[i][0].generated_text.slice(-1) === '.') {
+            textArea.value += ' '
+          } else if(data[i][0].generated_text.slice(-1) === ','){
+            textArea.value += ' '
+          } else {
+            textArea.value += '. '
+          }
+        }
+      })
     }
+    
+    // catch model starting
+    async function query(data) {
+      const response = await fetch(
+        "https://api-inference.huggingface.co/models/SigmarAI/MBART",
+        {
+          headers: { Authorization: `Bearer ${API_TOKEN}` },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await response.json();
+      return result;
+    }
+    displayLoading()
+    query('สวัสดี').then((response) => {
+      let sample_text = JSON.stringify(response)
+      if(sample_text.match('error')){
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      } else {
+        fn()
+      }
+    });
   }
+  // ---------------------------------------------------------------------------------------------------------------------------
 
   function translatorMT5_TH_EN() {
     var sentence = document.getElementById("input_text").value
@@ -150,47 +330,64 @@ function App() {
     textArea.value = ''
     var data = sentence.split(" ")
 
-    // translate
-    for(var i = 0; i < data.length; i++) {
-      textArea.value = textArea.value.slice(0, -20)
-      fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5",
-      {
-        headers: { Authorization: `Bearer ${API_TOKEN}` },
-        method: "POST",
-        body: JSON.stringify(data[i])
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        try {
-          if('generated_text' in data[0]){
-            console.log(JSON.stringify(data))
-            textArea.value += data[0].generated_text
-            if(data[0].generated_text.slice(-1) === '.') {
-              textArea.value += ' '
-            } else if(data[0].generated_text.slice(-1) === ','){
-              textArea.value += ' '
-            } else {
-              textArea.value += '. '
-            }
-          }
-        } catch (error) {
-          var timeleft = 60;
-          var downloadTimer = setInterval(function(){
-            if(timeleft <= 0){
-              clearInterval(downloadTimer);
-              textArea.value = 'model started please try again...'
-              } else {
-                textArea.value = 'starting model please try again in... ' + timeleft;
-              }
-            timeleft -= 1;
-          }, 1000);
-        }
-      });
-      if(i !== data.length - 1){
-        textArea.value += ' model predicting...'
+    let promises = []; 
+    let i = 0
+    
+    const fn = async() => {
+      while(i < data.length) {
+        promises.push(
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
+            headers: { Authorization: `Bearer ${API_TOKEN}` },
+            method: "POST",
+            body: JSON.stringify(data[i])
+          }).then(response => response.json())
+        )
+        i++
       }
+      await Promise.all(promises).then(data => {
+        console.log(JSON.stringify(data));
+        hideLoading()
+        for(i = 0; i < data.length; i++) {
+          textArea.value += data[i][0].generated_text
+          if(data[i][0].generated_text.slice(-1) === '.') {
+            textArea.value += ' '
+          } else if(data[i][0].generated_text.slice(-1) === ','){
+            textArea.value += ' '
+          } else {
+            textArea.value += '. '
+          }
+        }
+      })
     }
+    
+    // catch model starting
+    async function query(data) {
+      const response = await fetch(
+        "https://api-inference.huggingface.co/models/SigmarAI/MT5",
+        {
+          headers: { Authorization: `Bearer ${API_TOKEN}` },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await response.json();
+      return result;
+    }
+
+    displayLoading()
+    query('สวัสดี').then((response) => {
+      let sample_text = JSON.stringify(response)
+      if(sample_text.match('error')){
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      } else {
+        fn()
+      }
+    });
   }
+  // ---------------------------------------------------------------------------------------------------------------------------
 
   function translatorMarian_TH_EN() {
     var sentence = document.getElementById("input_text").value
@@ -198,46 +395,64 @@ function App() {
     textArea.value = ''
     var data = sentence.split(" ")
 
-    for(var i = 0; i < data.length; i++) {
-      textArea.value = textArea.value.slice(0, -20)
-      fetch("https://api-inference.huggingface.co/models/SigmarAI/Marian",
-      {
-        headers: { Authorization: `Bearer ${API_TOKEN}` },
-        method: "POST",
-        body: JSON.stringify(data[i])
-      })
-      .then((response) => response.json())
-      .then((data) => {
-        try {
-          if('generated_text' in data[0]){
-            console.log(JSON.stringify(data))
-            textArea.value += data[0].generated_text
-            if(data[0].generated_text.slice(-1) === '.') {
-              textArea.value += ' '
-            } else if(data[0].generated_text.slice(-1) === ','){
-              textArea.value += ' '
-            } else {
-              textArea.value += '. '
-            }
-          }
-        } catch (error) {
-          var timeleft = 30;
-          var downloadTimer = setInterval(function(){
-            if(timeleft <= 0){
-              clearInterval(downloadTimer);
-              textArea.value = 'model started please try again...'
-              } else {
-                textArea.value = 'starting model please try again in... ' + timeleft;
-              }
-            timeleft -= 1;
-          }, 1000);
-        }
-      });
-      if(i !== data.length - 1){
-        textArea.value += ' model predicting...'
+    let promises = []; 
+    let i = 0
+    
+    const fn = async() => {
+      while(i < data.length) {
+        promises.push(
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/Marian", {
+            headers: { Authorization: `Bearer ${API_TOKEN}` },
+            method: "POST",
+            body: JSON.stringify(data[i])
+          }).then(response => response.json())
+        )
+        i++
       }
+      await Promise.all(promises).then(data => {
+        console.log(JSON.stringify(data));
+        hideLoading()
+        for(i = 0; i < data.length; i++) {
+          textArea.value += data[i][0].generated_text.replace('▁', '')
+          if(data[i][0].generated_text.slice(-1) === '.') {
+            textArea.value += ' '
+          } else if(data[i][0].generated_text.slice(-1) === ','){
+            textArea.value += ' '
+          } else {
+            textArea.value += '. '
+          }
+        }
+      })
     }
+    
+    // catch model starting
+    async function query(data) {
+      const response = await fetch(
+        "https://api-inference.huggingface.co/models/SigmarAI/Marian",
+        {
+          headers: { Authorization: `Bearer ${API_TOKEN}` },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await response.json();
+      return result;
+    }
+
+    displayLoading()
+    query('สวัสดี').then((response) => {
+      let sample_text = JSON.stringify(response)
+      if(sample_text.match('error')){
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      } else {
+        fn()
+      }
+    });
   }
+  // ---------------------------------------------------------------------------------------------------------------------------
 
   // Function Create Data
   function createData() {
@@ -259,6 +474,7 @@ function App() {
     .then((response) => response.json())       
     }
 
+  // ---------------------------------------------------------------------------------------------------------------------------// 
   return (
     <>
       <div>
@@ -305,18 +521,20 @@ function App() {
             className="form-control"
             defaultValue={String}
             placeholder={showtext2}
-            style={{ maxWidth: 1300, height: 100 }}
+            style={{ maxWidth: 1300, height: 130 }}
           />
         </div>
         <div className="text-center">
           <br />
           <br />
           <button
+            id="submit"
             type="submit"
             className="btn-custom btn-lg"
 
             // Call function translator มาใช้
             onClick={translator}
+
             style={{ maxWidth: 200, height: 50 }}
           >
             แปลภาษา
@@ -330,24 +548,27 @@ function App() {
           </p>
           <nav
             className="navbar navbar-expand-lg navbar-light"
-            style={{ backgroundColor: "#3B270C", maxWidth: 1300, height: 50 }}
-          ></nav>
+            style={{ backgroundColor: "#3B270C", maxWidth: 1300, height: 50 }}>
+            </nav>
+
+            <div id="loader" className="loader">
+            <div className="spinner"></div>
+            <span className="text-dark"style={{ fontSize: 25 }}>&nbsp;&nbsp;Loading Model...</span>
+            </div>
+
           <textarea
             id="result"
             className="form-control"
             readOnly
-            style={{ maxWidth: 1300, height: 100 }}
-            defaultValue={String}
-          />
-          <br />
-          <br />
-          <br />
+            style={{ maxWidth: 1300, height: 130 }}
+            defaultValue={String}>
+          </textarea>
           <br />
           <br />
         </div>
         <nav
           className="navbar navbar-expand-lg navbar-light"
-          style={{ backgroundColor: "#3B270C", height: 102 }}
+          style={{ backgroundColor: "#3B270C", height: 115 }}
         />
       </div>
     </>

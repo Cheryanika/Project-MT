@@ -62,7 +62,7 @@ th{
   }
 }
 
-#loader {
+#loading {
   width: 70%;
   height: 15vh;
   display: flex;
@@ -74,6 +74,6 @@ th{
   visibility: hidden;
 }
 
-#loader.display{
+#loading.display{
   visibility: visible;
 }

@@ -73,13 +73,14 @@ function App() {
   }
   // ---------------------------------------------------------------------------------------------------------------------------//
   // Function Loading Model spinner
-  const loader = document.getElementById("loader");
   // show loading
   function displayLoading() {
+    const loader = document.getElementById("loading");
     loader.classList.add("display");}
     
   // hidden loading
   function hideLoading() {
+    const loader = document.getElementById("loading");
     loader.classList.remove("display");}
 
   // ---------------------------------------------------------------------------------------------------------------------------//
@@ -88,7 +89,18 @@ function App() {
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
     textArea.value = ''
-    var data = sentence.split(". ")
+    
+    var data = sentence.split('. ')
+
+    // let str = sentence,
+    // strArray = str.split(/[,.]/),
+    // spliterArray = str.match(/[,.]/g),
+    // data = [];
+
+    // for (let [key, val] of strArray.entries()) {
+    //   let splitVal = spliterArray[key] ? spliterArray[key] : "";
+    //   data.push(val.trim() + splitVal);
+    // }
 
     let promises = []; 
     let i = 0
@@ -104,14 +116,21 @@ function App() {
         )
         i++
       }
-      await Promise.all(promises).then(data => {
-        console.log(JSON.stringify(data));
-        hideLoading()
-        textArea.value = ''
-        for(i = 0; i < data.length; i++) {
-          textArea.value += data[i][0].generated_text + ' '
-        }
-      })
+      if(!JSON.stringify(data).match('error')){
+        await Promise.all(promises).then(data => {
+          console.log(JSON.stringify(data));
+          hideLoading()
+          textArea.value = ''
+          for(i = 0; i < data.length; i++) {
+            textArea.value += data[i][0].generated_text + ' '
+          }
+        })
+      } else {
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      }
     }
     
     // catch model starting
@@ -129,7 +148,7 @@ function App() {
     }
 
     displayLoading()
-    query('hello').then((response) => {
+    query('test').then((response) => {
       let sample_text = JSON.stringify(response)
       if(sample_text.match('error')){
         setTimeout(() => {
@@ -148,7 +167,18 @@ function App() {
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
     textArea.value = ''
-    var data = sentence.split(". ")
+
+    var data = sentence.split('. ')
+
+    // let str = sentence,
+    // strArray = str.split(/[,.]/),
+    // spliterArray = str.match(/[,.]/g),
+    // data = [];
+
+    // for (let [key, val] of strArray.entries()) {
+    //   let splitVal = spliterArray[key] ? spliterArray[key] : "";
+    //   data.push(val.trim() + splitVal);
+    // }
 
     let promises = []; 
     let i = 0
@@ -164,14 +194,21 @@ function App() {
         )
         i++
       }
-      await Promise.all(promises).then(data => {
-        console.log(JSON.stringify(data));
-        hideLoading()
-        textArea.value = ''
-        for(i = 0; i < data.length; i++) {
-          textArea.value += data[i][0].generated_text + ' '
-        }
-      })
+      if(!JSON.stringify(data).match('error')){
+        await Promise.all(promises).then(data => {
+          console.log(JSON.stringify(data));
+          hideLoading()
+          textArea.value = ''
+          for(i = 0; i < data.length; i++) {
+            textArea.value += data[i][0].generated_text + ' '
+          }
+        })
+      } else {
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      }
     }
     
     // catch model starting
@@ -189,7 +226,7 @@ function App() {
     }
 
     displayLoading()
-    query('hello').then((response) => {
+    query('test').then((response) => {
       let sample_text = JSON.stringify(response)
       if(sample_text.match('error')){
         setTimeout(() => {
@@ -207,7 +244,18 @@ function App() {
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
     textArea.value = ''
-    var data = sentence.split(". ")
+
+    var data = sentence.split('. ')
+
+    // let str = sentence,
+    // strArray = str.split(/[,.]/),
+    // spliterArray = str.match(/[,.]/g),
+    // data = [];
+
+    // for (let [key, val] of strArray.entries()) {
+    //   let splitVal = spliterArray[key] ? spliterArray[key] : "";
+    //   data.push(val.trim() + splitVal);
+    // }
 
     let promises = []; 
     let i = 0
@@ -223,14 +271,21 @@ function App() {
         )
         i++
       }
-      await Promise.all(promises).then(data => {
-        console.log(JSON.stringify(data));
-        hideLoading()
-        textArea.value = ''
-        for(i = 0; i < data.length; i++) {
-          textArea.value += data[i][0].generated_text.replaceAll('▁', '') + ' '
-        }
-      })
+      if(!JSON.stringify(data).match('error')){
+        await Promise.all(promises).then(data => {
+          console.log(JSON.stringify(data));
+          hideLoading()
+          textArea.value = ''
+          for(i = 0; i < data.length; i++) {
+            textArea.value += data[i][0].generated_text.replaceAll('▁', '') + ' '
+          }
+        })
+      } else {
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      }
     }
     
     // catch model starting
@@ -248,7 +303,7 @@ function App() {
     }
 
     displayLoading()
-    query('hello').then((response) => {
+    query('test').then((response) => {
       let sample_text = JSON.stringify(response)
       if(sample_text.match('error')){
         setTimeout(() => {
@@ -283,21 +338,28 @@ function App() {
         )
         i++
       }
-      await Promise.all(promises).then(data => {
-        console.log(JSON.stringify(data));
-        hideLoading()
-        textArea.value = ''
-        for(i = 0; i < data.length; i++) {
-          textArea.value += data[i][0].generated_text
-          if(data[i][0].generated_text.slice(-1) === '.') {
-            textArea.value += ' '
-          } else if(data[i][0].generated_text.slice(-1) === ','){
-            textArea.value += ' '
-          } else {
-            textArea.value += '. '
+      if(!JSON.stringify(data).match('error')){
+        await Promise.all(promises).then(data => {
+          console.log(JSON.stringify(data));
+          hideLoading()
+          textArea.value = ''
+          for(i = 0; i < data.length; i++) {
+            textArea.value += data[i][0].generated_text
+            if(data[i][0].generated_text.slice(-1) === '.') {
+              textArea.value += ' '
+            } else if(data[i][0].generated_text.slice(-1) === ','){
+              textArea.value += ' '
+            } else {
+              textArea.value += '. '
+            }
           }
-        }
-      })
+        })
+      } else {
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      }
     }
     
     // catch model starting
@@ -340,7 +402,7 @@ function App() {
     const fn = async() => {
       while(i < data.length) {
         promises.push(
-          fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART", {
             headers: { Authorization: `Bearer ${API_TOKEN}` },
             method: "POST",
             body: JSON.stringify(data[i])
@@ -348,27 +410,34 @@ function App() {
         )
         i++
       }
-      await Promise.all(promises).then(data => {
-        console.log(JSON.stringify(data));
-        hideLoading()
-        textArea.value = ''
-        for(i = 0; i < data.length; i++) {
-          textArea.value += data[i][0].generated_text
-          if(data[i][0].generated_text.slice(-1) === '.') {
-            textArea.value += ' '
-          } else if(data[i][0].generated_text.slice(-1) === ','){
-            textArea.value += ' '
-          } else {
-            textArea.value += '. '
+      if(!JSON.stringify(data).match('error')){
+        await Promise.all(promises).then(data => {
+          console.log(JSON.stringify(data));
+          hideLoading()
+          textArea.value = ''
+          for(i = 0; i < data.length; i++) {
+            textArea.value += data[i][0].generated_text
+            if(data[i][0].generated_text.slice(-1) === '.') {
+              textArea.value += ' '
+            } else if(data[i][0].generated_text.slice(-1) === ','){
+              textArea.value += ' '
+            } else {
+              textArea.value += '. '
+            }
           }
-        }
-      })
+        })
+      } else {
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      }
     }
     
     // catch model starting
     async function query(data) {
       const response = await fetch(
-        "https://api-inference.huggingface.co/models/SigmarAI/MT5",
+        "https://api-inference.huggingface.co/models/SigmarAI/MBART",
         {
           headers: { Authorization: `Bearer ${API_TOKEN}` },
           method: "POST",
@@ -378,7 +447,6 @@ function App() {
       const result = await response.json();
       return result;
     }
-
     displayLoading()
     query('สวัสดี').then((response) => {
       let sample_text = JSON.stringify(response)
@@ -406,7 +474,7 @@ function App() {
     const fn = async() => {
       while(i < data.length) {
         promises.push(
-          fetch("https://api-inference.huggingface.co/models/SigmarAI/Marian", {
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART", {
             headers: { Authorization: `Bearer ${API_TOKEN}` },
             method: "POST",
             body: JSON.stringify(data[i])
@@ -414,27 +482,34 @@ function App() {
         )
         i++
       }
-      await Promise.all(promises).then(data => {
-        console.log(JSON.stringify(data));
-        hideLoading()
-        textArea.value = ''
-        for(i = 0; i < data.length; i++) {
-          textArea.value += data[i][0].generated_text.replace('▁', '')
-          if(data[i][0].generated_text.slice(-1) === '.') {
-            textArea.value += ' '
-          } else if(data[i][0].generated_text.slice(-1) === ','){
-            textArea.value += ' '
-          } else {
-            textArea.value += '. '
+      if(!JSON.stringify(data).match('error')){
+        await Promise.all(promises).then(data => {
+          console.log(JSON.stringify(data));
+          hideLoading()
+          textArea.value = ''
+          for(i = 0; i < data.length; i++) {
+            textArea.value += data[i][0].generated_text.replaceAll('▁', '')
+            if(data[i][0].generated_text.slice(-1) === '.') {
+              textArea.value += ' '
+            } else if(data[i][0].generated_text.slice(-1) === ','){
+              textArea.value += ' '
+            } else {
+              textArea.value += '. '
+            }
           }
-        }
-      })
+        })
+      } else {
+        setTimeout(() => {
+          hideLoading()
+          document.getElementById("submit").click();
+        }, 10000);
+      }
     }
     
     // catch model starting
     async function query(data) {
       const response = await fetch(
-        "https://api-inference.huggingface.co/models/SigmarAI/Marian",
+        "https://api-inference.huggingface.co/models/SigmarAI/MBART",
         {
           headers: { Authorization: `Bearer ${API_TOKEN}` },
           method: "POST",
@@ -444,7 +519,6 @@ function App() {
       const result = await response.json();
       return result;
     }
-
     displayLoading()
     query('สวัสดี').then((response) => {
       let sample_text = JSON.stringify(response)
@@ -555,11 +629,11 @@ function App() {
           <nav
             className="navbar navbar-expand-lg navbar-light"
             style={{ backgroundColor: "#3B270C", maxWidth: 1300, height: 50 }}>
-            </nav>
+          </nav>
 
-            <div id="loader" className="loader">
-            <div className="spinner"></div>
-            <span className="text-dark"style={{ fontSize: 25 }}>&nbsp;&nbsp;Loading Model...</span>
+            <div id="loading">
+              <div className="spinner"></div>
+              <span className="text-dark"style={{ fontSize: 25 }}>&nbsp;&nbsp;Loading Model...</span>
             </div>
 
           <textarea

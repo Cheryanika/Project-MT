@@ -43,7 +43,7 @@ function App() {
   }
   
   // ---------------------------------------------------------------------------------------------------------------------------//
-  //Function Translate and Collect translate data EN-TH
+  //Function Translate and Collect translate data
   function translator() {
     getOption();
     setTimeout(() => {
@@ -107,6 +107,7 @@ function App() {
       await Promise.all(promises).then(data => {
         console.log(JSON.stringify(data));
         hideLoading()
+        textArea.value = ''
         for(i = 0; i < data.length; i++) {
           textArea.value += data[i][0].generated_text + ' '
         }
@@ -166,6 +167,7 @@ function App() {
       await Promise.all(promises).then(data => {
         console.log(JSON.stringify(data));
         hideLoading()
+        textArea.value = ''
         for(i = 0; i < data.length; i++) {
           textArea.value += data[i][0].generated_text + ' '
         }
@@ -224,8 +226,9 @@ function App() {
       await Promise.all(promises).then(data => {
         console.log(JSON.stringify(data));
         hideLoading()
+        textArea.value = ''
         for(i = 0; i < data.length; i++) {
-          textArea.value += data[i][0].generated_text.replace('▁', '') + ' '
+          textArea.value += data[i][0].generated_text.replaceAll('▁', '') + ' '
         }
       })
     }
@@ -283,6 +286,7 @@ function App() {
       await Promise.all(promises).then(data => {
         console.log(JSON.stringify(data));
         hideLoading()
+        textArea.value = ''
         for(i = 0; i < data.length; i++) {
           textArea.value += data[i][0].generated_text
           if(data[i][0].generated_text.slice(-1) === '.') {
@@ -347,6 +351,7 @@ function App() {
       await Promise.all(promises).then(data => {
         console.log(JSON.stringify(data));
         hideLoading()
+        textArea.value = ''
         for(i = 0; i < data.length; i++) {
           textArea.value += data[i][0].generated_text
           if(data[i][0].generated_text.slice(-1) === '.') {
@@ -412,6 +417,7 @@ function App() {
       await Promise.all(promises).then(data => {
         console.log(JSON.stringify(data));
         hideLoading()
+        textArea.value = ''
         for(i = 0; i < data.length; i++) {
           textArea.value += data[i][0].generated_text.replace('▁', '')
           if(data[i][0].generated_text.slice(-1) === '.') {

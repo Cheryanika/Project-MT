@@ -558,19 +558,17 @@ function App() {
   return (
     <>
       <div>
-        <div style={{ backgroundColor: "#3B270C", maxWidth: 2000,height: 150, fontSize: 26}}>
+        <div style={{ backgroundColor: "#3B270C", maxWidth: 5000,height: 150, fontSize: 26}}>
           <table>
             <tr>
               <th><img src={image} weight={82} height={150} alt={image}></img></th>
               <th className="text-light">แปลภาษาบทคัดย่อภาษาไทย - อังกฤษ<br/>Abstract Translation Thai-English</th><br/><br/>
-              <div>
-                <select className="form-select position-absolute right-0 end-0 translate-middle" 
+              <select className="form-select position-absolute right-0 end-0 translate-middle" 
                         id="lange_text"
                         onChange={(e)=>handletext(e)}>
                       <option value="th-en">TH-EN</option>
                       <option value="en-th">EN-TH</option>
-                  </select>
-              </div>
+              </select>
             </tr>
           </table>
         </div>
@@ -646,9 +644,23 @@ function App() {
           <br />
           <br />
         </div>
+
+        <div className="container">
+          <br />
+          <p className="text-dark" style={{ fontSize: 20 }}>
+            {" "}
+            <label className="form-label">*คำแนะนำการใช้งาน</label><br />
+            <text className="text-dark" style={{ fontSize: 16 }}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- หลีกเลี่ยงประโยคที่ยาวเกินไป<br />
+	                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ลดการใช้ "," เป็นคำเชื่อมประโยค<br />
+	                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ลดการใช้คำเชื่อมประโยค ควรขึ้นประโยคใหม่<br />
+            </text>
+          </p>
+        </div>
+        
         <nav
           className="navbar navbar-expand-lg navbar-light"
-          style={{ backgroundColor: "#3B270C", height: 115 }}
+          style={{ backgroundColor: "#3B270C", maxWidth: 5000, height: 75 }}
         />
       </div>
     </>

@@ -84,11 +84,16 @@ th{
 
 .credit-text-1 {
   color:  #000000 ;
-  text-align:center;
+  text-align: justify;
 }
 .credit-text-2 {
   color:  #000000 ;
-  text-align:left;
+  text-align: justify ;
+}
+
+.credit-text-3 {
+  color:  #000000 ;
+  text-align: left ;
 }
 
 a:link {
@@ -96,6 +101,7 @@ a:link {
   background-color: transparent;
   text-decoration: none;
   font-weight: bold;
+  font-Size: 14px;
 }
 
 a:visited {
@@ -103,6 +109,7 @@ a:visited {
   background-color: transparent;
   text-decoration: none;
   font-weight: bold;
+  font-Size: 14px;
 }
 
 .a-2:link{
@@ -120,8 +127,9 @@ a:visited {
 } */
 
 .credit_pad {
-  width: 300px;
-  padding-left:100px;
-  padding-right: 100px;
+  width: 50px;
+  padding-left:50px;
+  padding-right: 50px;
   font-weight: bold ;
+  text-align:center
 }

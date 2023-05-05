@@ -90,18 +90,7 @@ function App() {
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
     textArea.value = ''
-    
     var data = sentence.split('. ')
-    
-    // let str = sentence,
-    // strArray = str.split(/[,.]/),
-    // spliterArray = str.match(/[,.]/g),
-    // data = [];
-
-    // for (let [key, val] of strArray.entries()) {
-    //   let splitVal = spliterArray[key] ? spliterArray[key] : "";
-    //   data.push(val.trim() + splitVal);
-    // }
 
     let promises = []; 
     let i = 0
@@ -186,7 +175,7 @@ function App() {
 
     let promises = []; 
     let i = 0
-    
+
     const fn = async() => {
       while(i < data.length) {
         if(data[i].slice(-1) !== '.'){
@@ -408,11 +397,11 @@ function App() {
 
     let promises = []; 
     let i = 0
-    
+
     const fn = async() => {
       while(i < data.length) {
         promises.push(
-          fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART", {
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
             headers: { Authorization: `Bearer ${API_TOKEN}` },
             method: "POST",
             body: JSON.stringify(data[i])
@@ -447,7 +436,7 @@ function App() {
     // catch model starting
     async function query(data) {
       const response = await fetch(
-        "https://api-inference.huggingface.co/models/SigmarAI/MBART",
+        "https://api-inference.huggingface.co/models/SigmarAI/MT5",
         {
           headers: { Authorization: `Bearer ${API_TOKEN}` },
           method: "POST",
@@ -484,7 +473,7 @@ function App() {
     const fn = async() => {
       while(i < data.length) {
         promises.push(
-          fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART", {
+          fetch("https://api-inference.huggingface.co/models/SigmarAI/Marian", {
             headers: { Authorization: `Bearer ${API_TOKEN}` },
             method: "POST",
             body: JSON.stringify(data[i])
@@ -519,7 +508,7 @@ function App() {
     // catch model starting
     async function query(data) {
       const response = await fetch(
-        "https://api-inference.huggingface.co/models/SigmarAI/MBART",
+        "https://api-inference.huggingface.co/models/SigmarAI/Marian",
         {
           headers: { Authorization: `Bearer ${API_TOKEN}` },
           method: "POST",
@@ -570,7 +559,7 @@ function App() {
   return (
     <>
       <div>
-        <div style={{ backgroundColor: "#3B270C", maxWidth: 5000,height: 150, fontSize: 26}}>
+        <div style={{ backgroundColor: "#3B270C", maxWidth: 5000,maxheight: 150, fontSize: 26}}>
           <table>
             <tr>
               <th><img src={image} weight={82} height={150} alt={image}></img></th>
@@ -672,42 +661,43 @@ function App() {
         </tr>
 
         <tr>
-          <th className="credit-text-1" style={{fontSize: 14 }}>
-              ระบบแปลภาษาสำหรับบทคัดย่อบทความทางวิชาการภาษาไทย-อังกฤษ
-              <br/>ด้วยแบบจำลอง Deep Neural Machine Translation 
-              <br/>ฝึกด้วยชุดข้อมูลบทคัดย่อภาษาไทย-อังกฤษ
-              <br/>ซึ่งรวบรวมมาจากวารสารทางวิศวกรรมที่ตีพิมพ์บน&nbsp;<a href="https://www.tci-thaijo.org/" >ThaiJO</a>
-              <br/>จำนวน 1,125 บทความ ในขณะนี้รองรับ 3 แบบจำลองได้แก่&nbsp;
-              <a href="https://arxiv.org/abs/2010.11934">MT5,&nbsp;</a>
-              <a href="https://arxiv.org/abs/2001.08210">MBART,&nbsp;</a>
-              <a href="https://arxiv.org/abs/1804.00344">Marian&nbsp;</a>
+          <th className="credit-text-1" style={{fontSize: 16 }}>
+              ระบบแปลภาษาสำหรับบทคัดย่อบทความทางวิชาการภาษาไทย- อังกฤษด้วยแบบจำลอง Deep Neural Machine Translation 
+              ฝึกด้วยชุดข้อมูลบทคัดย่อภาษาไทย-อังกฤษซึ่งรวบรวมมาจากวารสารทางวิศวกรรมที่ตีพิมพ์บน<a href="https://www.tci-thaijo.org/" >&nbsp;ThaiJO&nbsp;</a>
+              จำนวน 1,125 บทความในขณะนี้รองรับ 3 แบบจำลองได้แก่<a href="https://arxiv.org/abs/2010.11934"> MT5, </a>
+              <a href="https://arxiv.org/abs/2001.08210"> MBART, </a>
+              <a href="https://arxiv.org/abs/1804.00344">Marian </a>
               <br/><br/><br/><br/>
             </th>
 
-            <th className="credit-text-2" style={{fontSize: 14 }}><br/>
-              1. กรอกบทคัดย่อในกล่องข้อความจากนั้นเลือกภาษาที่จะแปลโดยมีให้เลือก
-              <br/>&nbsp;&nbsp;&nbsp;&nbsp;ระหว่าง TH-EN และ EN-TH และเลือก Machine Translation และกดแปล
-              <br/>&nbsp;&nbsp;&nbsp;&nbsp;ภาษา<br/>
-              2. ในการแปลครั้งแรกจะต้องรอประมาณ 5 - 10 นาที<br/>
-              3. บทคัดย่อควรมียาวประมาณไม่เกิน 10 ประโยค<br/>
-              4. หากพบข้อผิดพลาดใดๆ สามารถแจ้งปัญหาได้ทาง
-              <a href="https://docs.google.com/forms/u/0/"> Google&nbsp;Form</a>&nbsp;นี้
+            <th className="credit-text-3" style={{fontSize: 16 }}><br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;1. กรอกบทคัดย่อในกล่องข้อความจากนั้นเลือกภาษาที่จะแปล<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;โดยมีให้เลือกระหว่าง TH-EN และ EN-TH และเลือก Machine 
+            &nbsp;&nbsp;&nbsp;&nbsp;Translation และกดแปลภาษา<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;2. ในการแปลครั้งแรกจะต้องรอประมาณ 5 - 10 นาที<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;3. บทคัดย่อควรมียาวประมาณไม่เกิน 10 ประโยค<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;4. หากพบข้อผิดพลาดใดๆสามารถแจ้งปัญหาได้ทาง<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://forms.gle/iEXJGkvbuBxQgFUA6">Google Form </a> นี้
+
               <br/><br/>
-              <button className="btn-custom btn-sm">
+            &nbsp;&nbsp;&nbsp;&nbsp;<button className="btn-custom btn-sm">
                 <a className="a-2" href={howtouse} download={"HowToUseWebsite"}>คู่มือการใช้งานแบบละเอียด</a>
               </button>
-              <br/><br/>
+              <br/>
             </th>
 
-            <th className="credit-text-1" style={{fontSize: 14 }}>
-            ระบบนี้เป็นส่วนหนึ่งของปริญญานิพนธ์สาขาวิศวกรรมคอมพิวเตอร์ 
-            <br/>คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีราชมงคลล้านนา เชียงใหม่ 
-            <br/>จัดทำโดย นางสาวเฌอญานิกา วงค์ตาแก้ว และนายนครินทร์ คมลาย
-            <br/>ซึ่งพัฒนาโดยใช้ Google Colab Pro ในการฝึกแบบจำลอง 
-            <br/>ใช้ <a href="https://wandb.ai/home">Weights & Bias</a> ในการวิเคราะห์พารามิเตอร์ของแบบจำลอง,&nbsp; 
-            <br/><a href="https://huggingface.co/docs/transformers/index">Huggingface</a> สำหรับการอัพโหลดแบบจำลองและเรียกใช้งานผ่าน API
-            <br/>และใช้ระบบ Host และฐานข้อมูล Database โดย <a href="https://firebase.google.com/">Firebase</a>&nbsp;  
-            <br/>สามารถเข้าศึกษาแบบจำลองที่นักศึกษาใช้งานได้ที่&nbsp; <a href="https://github.com/defyMiy/NMT-Project">Github</a>
+            <th className="credit-text-1" style={{fontSize: 16 }}>
+           ระบบนี้เป็นส่วนหนึ่งของปริญญานิพนธ์สาขาวิศวกรรมคอมพิวเตอร์ 
+           คณะวิศวกรรมศาสตร์มหาวิทยาลัยเทคโนโลยีราชมงคลล้านนา 
+          เชียงใหม่ 
+            จัดทำโดย นางสาวเฌอญานิกา วงค์ตาแก้ว และนายนครินทร์ คมลาย 
+            ซึ่งพัฒนาโดยใช้ Google Colab Pro ในการฝึก
+            แบบจำลองใช้ <a href="https://wandb.ai/home">Weights & Bias</a> ในการวิเคราะห์พารามิเตอร์ของแบบจำลอง
+            <a href="https://huggingface.co/docs/transformers/index"> Huggingface </a> 
+            สำหรับการอัพโหลดแบบจำลองและเรียกใช้งานผ่าน API และใช้ระบบ Host และฐานข้อมูล Database โดย 
+            <a href="https://firebase.google.com/"> Firebase</a>&nbsp;  
+            สามารถเข้าศึกษาแบบจำลองที่นักศึกษาใช้งานได้ที่ 
+            <a href="https://github.com/defyMiy/NMT-Project"> Github</a>
             <br/><br/>
             </th>
 

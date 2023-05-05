@@ -1,5 +1,6 @@
 import React,{useState} from "react";
 import image from "./Image/rmutl.webp";
+import howtouse from "./Image/howtousewebsite.pdf";
 import API_TOKEN from "./apitoken";
 
 function App() {
@@ -91,7 +92,7 @@ function App() {
     textArea.value = ''
     
     var data = sentence.split('. ')
-
+    
     // let str = sentence,
     // strArray = str.split(/[,.]/),
     // spliterArray = str.match(/[,.]/g),
@@ -107,6 +108,9 @@ function App() {
     
     const fn = async() => {
       while(i < data.length) {
+        if(data[i].slice(-1) !== '.'){
+          data[i] = data[i] + '.'
+        }
         promises.push(
           fetch("https://api-inference.huggingface.co/models/SigmarAI/MBART", {
             headers: { Authorization: `Bearer ${API_TOKEN}` },
@@ -185,6 +189,9 @@ function App() {
     
     const fn = async() => {
       while(i < data.length) {
+        if(data[i].slice(-1) !== '.'){
+          data[i] = data[i] + '.'
+        }
         promises.push(
           fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
             headers: { Authorization: `Bearer ${API_TOKEN}` },
@@ -262,6 +269,9 @@ function App() {
     
     const fn = async() => {
       while(i < data.length) {
+        if(data[i].slice(-1) !== '.'){
+          data[i] = data[i] + '.'
+        }
         promises.push(
           fetch("https://api-inference.huggingface.co/models/SigmarAI/Marian", {
             headers: { Authorization: `Bearer ${API_TOKEN}` },
@@ -540,6 +550,7 @@ function App() {
     var Machine = document.getElementById("select_text").value;
     var Input = document.getElementById("input_text").value;
     var Output = document.getElementById("result").value;
+    var Translate = document.getElementById("lange_text").value;
 
     fetch(url,{
       headers: {
@@ -548,6 +559,7 @@ function App() {
       method: "POST",
       body: JSON.stringify({
         Machine: Machine,
+        Translate: Translate,
         Input: Input,
         Output: Output,}),
     })
@@ -624,15 +636,22 @@ function App() {
             {" "}
             <label className="form-label" id="lange_text2" >{showtext1}</label>
           </p>
-          <nav
-            className="navbar navbar-expand-lg navbar-light"
+          <div
             style={{ backgroundColor: "#3B270C", maxWidth: 1300, height: 50 }}>
-          </nav>
-
-            <div id="loading">
-              <div className="spinner"></div>
-              <span className="text-dark"style={{ fontSize: 25 }}>&nbsp;&nbsp;Loading Model...</span>
-            </div>
+              <br /><br /><br /><br />
+              
+          <table className="container">
+            <tr>
+                <th>
+                    <div id="loading">
+                        <div className="spinner"></div>
+                        <span className="text-dark"style={{ fontSize: 20 }}>
+                              &nbsp;&nbsp;Loading Model&nbsp;.&nbsp;&nbsp;.&nbsp;&nbsp;.</span>
+                    </div>
+                </th>
+            </tr>
+          </table>
+          </div>
 
           <textarea
             id="result"
@@ -642,26 +661,65 @@ function App() {
             defaultValue={String}>
           </textarea>
           <br />
-          <br />
         </div>
+        <br/>
 
-        <div className="container">
-          <br />
-          <p className="text-dark" style={{ fontSize: 20 }}>
-            {" "}
-            <label className="form-label">*คำแนะนำการใช้งาน</label><br />
-            <text className="text-dark" style={{ fontSize: 16 }}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- หลีกเลี่ยงประโยคที่ยาวเกินไป<br />
-	                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ลดการใช้ "," เป็นคำเชื่อมประโยค<br />
-	                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ลดการใช้คำเชื่อมประโยค ควรขึ้นประโยคใหม่<br />
-            </text>
-          </p>
-        </div>
-        
-        <nav
+        <table className="container credit">
+        <tr>
+          <th className="credit_pad" style={{fontSize: 18}}> About </th>
+          <th className="credit_pad" style={{fontSize: 18}}> วิธีใช้งานและคำแนะนำ </th>
+          <th className="credit_pad" style={{fontSize: 18}}> รายละเอียด </th>
+        </tr>
+
+        <tr>
+          <th className="credit-text-1" style={{fontSize: 14 }}>
+              ระบบแปลภาษาสำหรับบทคัดย่อบทความทางวิชาการภาษาไทย-อังกฤษ
+              <br/>ด้วยแบบจำลอง Deep Neural Machine Translation 
+              <br/>ฝึกด้วยชุดข้อมูลบทคัดย่อภาษาไทย-อังกฤษ
+              <br/>ซึ่งรวบรวมมาจากวารสารทางวิศวกรรมที่ตีพิมพ์บน&nbsp;<a href="https://www.tci-thaijo.org/" >ThaiJO</a>
+              <br/>จำนวน 1,125 บทความ ในขณะนี้รองรับ 3 แบบจำลองได้แก่&nbsp;
+              <a href="https://arxiv.org/abs/2010.11934">MT5,&nbsp;</a>
+              <a href="https://arxiv.org/abs/2001.08210">MBART,&nbsp;</a>
+              <a href="https://arxiv.org/abs/1804.00344">Marian&nbsp;</a>
+              <br/><br/><br/><br/>
+            </th>
+
+            <th className="credit-text-2" style={{fontSize: 14 }}><br/>
+              1. กรอกบทคัดย่อในกล่องข้อความจากนั้นเลือกภาษาที่จะแปลโดยมีให้เลือก
+              <br/>&nbsp;&nbsp;&nbsp;&nbsp;ระหว่าง TH-EN และ EN-TH และเลือก Machine Translation และกดแปล
+              <br/>&nbsp;&nbsp;&nbsp;&nbsp;ภาษา<br/>
+              2. ในการแปลครั้งแรกจะต้องรอประมาณ 5 - 10 นาที<br/>
+              3. บทคัดย่อควรมียาวประมาณไม่เกิน 10 ประโยค<br/>
+              4. หากพบข้อผิดพลาดใดๆ สามารถแจ้งปัญหาได้ทาง
+              <a href="https://docs.google.com/forms/u/0/"> Google&nbsp;Form</a>&nbsp;นี้
+              <br/><br/>
+              <button className="btn-custom btn-sm">
+                <a className="a-2" href={howtouse} download={"HowToUseWebsite"}>คู่มือการใช้งานแบบละเอียด</a>
+              </button>
+              <br/><br/>
+            </th>
+
+            <th className="credit-text-1" style={{fontSize: 14 }}>
+            ระบบนี้เป็นส่วนหนึ่งของปริญญานิพนธ์สาขาวิศวกรรมคอมพิวเตอร์ 
+            <br/>คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีราชมงคลล้านนา เชียงใหม่ 
+            <br/>จัดทำโดย นางสาวเฌอญานิกา วงค์ตาแก้ว และนายนครินทร์ คมลาย
+            <br/>ซึ่งพัฒนาโดยใช้ Google Colab Pro ในการฝึกแบบจำลอง 
+            <br/>ใช้ <a href="https://wandb.ai/home">Weights & Bias</a> ในการวิเคราะห์พารามิเตอร์ของแบบจำลอง,&nbsp; 
+            <br/><a href="https://huggingface.co/docs/transformers/index">Huggingface</a> สำหรับการอัพโหลดแบบจำลองและเรียกใช้งานผ่าน API
+            <br/>และใช้ระบบ Host และฐานข้อมูล Database โดย <a href="https://firebase.google.com/">Firebase</a>&nbsp;  
+            <br/>สามารถเข้าศึกษาแบบจำลองที่นักศึกษาใช้งานได้ที่&nbsp; <a href="https://github.com/defyMiy/NMT-Project">Github</a>
+            <br/><br/>
+            </th>
+
+        </tr>
+
+        </table>
+        <br/>
+
+        <footer
           className="navbar navbar-expand-lg navbar-light"
-          style={{ backgroundColor: "#3B270C", maxWidth: 5000, height: 75 }}
-        />
+          style={{ backgroundColor: "#3B270C", maxWidth: 5000, height: 50 }}>
+        </footer>
       </div>
     </>
   );

@@ -39,6 +39,7 @@ app.post("/create/translator", async (req, res) => {
     const id = "Date"+ "-" + full + "-" + time;
     const translatorJson = {
       Machine: req.body.Machine,
+      Translate: req.body.Translate,
       Input: req.body.Input,
       Output: req.body.Output,
     };

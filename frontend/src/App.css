@@ -45,9 +45,9 @@ th{
 }
 
 .spinner {
-  width: 64px;
-  height: 64px;
-  border: 8px solid;
+  width: 45px;
+  height: 45px;
+  border: 7px solid;
   border-color: #3a1f04 transparent #3a1f04 transparent;
   border-radius: 50%;
   animation: spin-anim 1.2s linear infinite;
@@ -63,12 +63,9 @@ th{
 }
 
 #loading {
-  width: 70%;
-  height: 15vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
   background: #00000000;
   z-index: 1;
   visibility: hidden;
@@ -76,4 +73,55 @@ th{
 
 #loading.display{
   visibility: visible;
+}
+
+.credit {
+  width: 100%;
+  text-align: center;
+  color: #3a1f04;
+
+}
+
+.credit-text-1 {
+  color:  #000000 ;
+  text-align:center;
+}
+.credit-text-2 {
+  color:  #000000 ;
+  text-align:left;
+}
+
+a:link {
+  color: #5b3209;
+  background-color: transparent;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:visited {
+  color: #5b3209;
+  background-color: transparent;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.a-2:link{
+  color: #ffffff;
+  font-weight:normal;
+}
+
+.a-2:visited {
+  color: #ffffff;
+  font-weight:normal
+}
+
+/* table, th, td {
+  border: 1px solid rgb(0, 0, 0);
+} */
+
+.credit_pad {
+  width: 300px;
+  padding-left:100px;
+  padding-right: 100px;
+  font-weight: bold ;
 }

@@ -1,5 +1,8 @@
 import React,{useState} from "react";
 import image from "./Image/rmutl.webp";
+import image2 from "./Image/browser.webp";
+import image3 from "./Image/book.webp";
+import image4 from "./Image/document.webp";
 import howtouse from "./Image/howtousewebsite.pdf";
 import API_TOKEN from "./apitoken";
 
@@ -157,80 +160,36 @@ function App() {
   // ---------------------------------------------------------------------------------------------------------------------------
   
   function translatorMT5_EN_TH(){
+    displayLoading()
     var sentence = document.getElementById("input_text").value
     var textArea = document.getElementById("result");
     textArea.value = ''
 
-    var data = sentence.split('. ')
-
-    // let str = sentence,
-    // strArray = str.split(/[,.]/),
-    // spliterArray = str.match(/[,.]/g),
-    // data = [];
-
-    // for (let [key, val] of strArray.entries()) {
-    //   let splitVal = spliterArray[key] ? spliterArray[key] : "";
-    //   data.push(val.trim() + splitVal);
-    // }
-
-    let promises = []; 
-    let i = 0
-
-    const fn = async() => {
-      while(i < data.length) {
-        if(data[i].slice(-1) !== '.'){
-          data[i] = data[i] + '.'
-        }
-        promises.push(
-          fetch("https://api-inference.huggingface.co/models/SigmarAI/MT5", {
-            headers: { Authorization: `Bearer ${API_TOKEN}` },
-            method: "POST",
-            body: JSON.stringify(data[i])
-          }).then(response => response.json())
-        )
-        i++
-      }
-      if(!JSON.stringify(data).match('error')){
-        await Promise.all(promises).then(data => {
-          console.log(JSON.stringify(data));
-          hideLoading()
-          textArea.value = ''
-          for(i = 0; i < data.length; i++) {
-            textArea.value += data[i][0].generated_text + ' '
-          }
-        })
-      } else {
-        setTimeout(() => {
-          hideLoading()
-          document.getElementById("submit").click();
-        }, 10000);
-      }
+    var data = {
+      "task": "en-th",
+      "text": sentence
     }
-    
-    // catch model starting
+
     async function query(data) {
       const response = await fetch(
-        "https://api-inference.huggingface.co/models/SigmarAI/MT5",
+        "https://682d-35-221-221-44.ngrok-free.app/",
         {
-          headers: { Authorization: `Bearer ${API_TOKEN}` },
           method: "POST",
           body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
       );
       const result = await response.json();
       return result;
     }
-
-    displayLoading()
-    query('test').then((response) => {
-      let sample_text = JSON.stringify(response)
-      if(sample_text.match('error')){
-        setTimeout(() => {
-          hideLoading()
-          document.getElementById("submit").click();
-        }, 10000);
-      } else {
-        fn()
+    
+    query(data).then((response) => {
+      console.log(JSON.stringify(response));
+      hideLoading()
+      for(let i = 0; i < response["prediction"].length; i++) {
+        textArea.value = textArea.value + response[i] + ' '
       }
     });
   }
@@ -253,7 +212,7 @@ function App() {
     //   data.push(val.trim() + splitVal);
     // }
 
-    let promises = []; 
+    let promises = [];
     let i = 0
     
     const fn = async() => {
@@ -322,7 +281,16 @@ function App() {
     var textArea = document.getElementById("result");
     textArea.value = ''
     var data = sentence.split(" ")
-    
+
+    for(let i = 0; i < data.length; i++) {
+      if(/[a-zA-Z]/i.test(data[i])) {
+        let engChar = data[i]
+        data[i-1] = data[i-1] + ' ' + engChar
+        data.splice(i, 1)
+        i = i - 1
+      }
+    }
+
     let promises = []; 
     let i = 0
     
@@ -395,6 +363,15 @@ function App() {
     textArea.value = ''
     var data = sentence.split(" ")
 
+    for(let i = 0; i < data.length; i++) {
+      if(/[a-zA-Z]/i.test(data[i])) {
+        let engChar = data[i]
+        data[i-1] = data[i-1] + ' ' + engChar
+        data.splice(i, 1)
+        i = i - 1
+      }
+    }
+
     let promises = []; 
     let i = 0
 
@@ -466,6 +443,15 @@ function App() {
     var textArea = document.getElementById("result");
     textArea.value = ''
     var data = sentence.split(" ")
+
+    for(let i = 0; i < data.length; i++) {
+      if(/[a-zA-Z]/i.test(data[i])) {
+        let engChar = data[i]
+        data[i-1] = data[i-1] + ' ' + engChar
+        data.splice(i, 1)
+        i = i - 1
+      }
+    }
 
     let promises = []; 
     let i = 0
@@ -654,15 +640,22 @@ function App() {
         <br/>
 
         <table className="container credit">
+
         <tr>
-          <th className="credit_pad" style={{fontSize: 18}}> About </th>
-          <th className="credit_pad" style={{fontSize: 18}}> วิธีใช้งานและคำแนะนำ </th>
-          <th className="credit_pad" style={{fontSize: 18}}> รายละเอียด </th>
+        <th className="credit_pad"><img src={image2} alt={image2}></img></th>
+        <th className="credit_pad"><img src={image3} alt={image3}></img></th>
+        <th className="credit_pad"><img src={image4} alt={image4}></img></th>
         </tr>
 
         <tr>
-          <th className="credit-text-1" style={{fontSize: 16 }}>
-              ระบบแปลภาษาสำหรับบทคัดย่อบทความทางวิชาการภาษาไทย- อังกฤษด้วยแบบจำลอง Deep Neural Machine Translation 
+          <th className="credit_pad" style={{fontSize: 18}}> เกี่ยวกับเว็บไซต์ </th>
+          <th className="credit_pad" style={{fontSize: 18}}> วิธีใช้งานและคำแนะนำ </th>
+          <th className="credit_pad" style={{fontSize: 18}}> รายละเอียดของโครงงาน </th>
+        </tr>
+
+        <tr>
+          <th className="credit-text-1" style={{fontSize: 15 }}>
+              ระบบแปลภาษาสำหรับบทคัดย่อบทความทางวิชาการภาษาไทย-อังกฤษด้วยแบบจำลอง Deep Neural Machine Translation 
               ฝึกด้วยชุดข้อมูลบทคัดย่อภาษาไทย-อังกฤษซึ่งรวบรวมมาจากวารสารทางวิศวกรรมที่ตีพิมพ์บน<a href="https://www.tci-thaijo.org/" >&nbsp;ThaiJO&nbsp;</a>
               จำนวน 1,125 บทความในขณะนี้รองรับ 3 แบบจำลองได้แก่<a href="https://arxiv.org/abs/2010.11934"> MT5, </a>
               <a href="https://arxiv.org/abs/2001.08210"> MBART, </a>
@@ -670,33 +663,31 @@ function App() {
               <br/><br/><br/><br/>
             </th>
 
-            <th className="credit-text-3" style={{fontSize: 16 }}><br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;1. กรอกบทคัดย่อในกล่องข้อความจากนั้นเลือกภาษาที่จะแปล<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;โดยมีให้เลือกระหว่าง TH-EN และ EN-TH และเลือก Machine 
-            &nbsp;&nbsp;&nbsp;&nbsp;Translation และกดแปลภาษา<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;2. ในการแปลครั้งแรกจะต้องรอประมาณ 5 - 10 นาที<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;3. บทคัดย่อควรมียาวประมาณไม่เกิน 10 ประโยค<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;4. หากพบข้อผิดพลาดใดๆสามารถแจ้งปัญหาได้ทาง<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://forms.gle/iEXJGkvbuBxQgFUA6">Google Form </a> นี้
+            <th className="credit-text-2" style={{fontSize: 15 }}><br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. กรอกบทคัดย่อในกล่องข้อความจากนั้นเลือกภาษาที่จะแปล<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยมีให้เลือกระหว่าง TH-EN และ EN-TH และเลือก Machine 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Translation และกดแปลภาษา<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. ในการแปลครั้งแรกจะต้องรอประมาณ 5 - 10 นาที<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. บทคัดย่อควรมียาวประมาณไม่เกิน 10 ประโยค<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. หากพบข้อผิดพลาดใดๆสามารถแจ้งปัญหาได้ทาง<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://forms.gle/iEXJGkvbuBxQgFUA6">Google Form </a> นี้
 
               <br/><br/>
             &nbsp;&nbsp;&nbsp;&nbsp;<button className="btn-custom btn-sm">
-                <a className="a-2" href={howtouse} download={"HowToUseWebsite"}>คู่มือการใช้งานแบบละเอียด</a>
+                <a className="a-2" href={howtouse} download={"HowToUseWebsite"}>คู่มือการใช้งาน</a>
               </button>
               <br/>
             </th>
 
-            <th className="credit-text-1" style={{fontSize: 16 }}>
-           ระบบนี้เป็นส่วนหนึ่งของปริญญานิพนธ์สาขาวิศวกรรมคอมพิวเตอร์ 
-           คณะวิศวกรรมศาสตร์มหาวิทยาลัยเทคโนโลยีราชมงคลล้านนา 
+            <th className="credit-text-1" style={{fontSize: 15 }}>
+           ระบบนี้เป็นส่วนหนึ่งของปริญญานิพนธ์สาขาวิศวกรรมคอมพิวเตอร์&nbsp;คณะวิศวกรรมศาสตร์มหาวิทยาลัยเทคโนโลยีราชมงคลล้านนา 
           เชียงใหม่ 
-            จัดทำโดย นางสาวเฌอญานิกา วงค์ตาแก้ว และนายนครินทร์ คมลาย 
-            ซึ่งพัฒนาโดยใช้ Google Colab Pro ในการฝึก
-            แบบจำลองใช้ <a href="https://wandb.ai/home">Weights & Bias</a> ในการวิเคราะห์พารามิเตอร์ของแบบจำลอง
+            จัดทำโดย นายนครินทร์ คมลาย และนางสาวเฌอญานิกา วงค์ตาแก้ว
+            ซึ่งพัฒนาโดยใช้ Google Colab Pro ในการฝึกแบบจำลองใช้ <a href="https://wandb.ai/home">Weights & Bias</a>&nbsp;ในการติดตามผลการฝึกแบบจำลอง
             <a href="https://huggingface.co/docs/transformers/index"> Huggingface </a> 
-            สำหรับการอัพโหลดแบบจำลองและเรียกใช้งานผ่าน API และใช้ระบบ Host และฐานข้อมูล Database โดย 
-            <a href="https://firebase.google.com/"> Firebase</a>&nbsp;  
-            สามารถเข้าศึกษาแบบจำลองที่นักศึกษาใช้งานได้ที่ 
+            ในการอัพโหลดแบบจำลองและเรียกใช้งานผ่าน&nbsp;Inference&nbsp;API&nbsp;และใช้ระบบ&nbsp;Host&nbsp;และฐานข้อมูล&nbsp;Database&nbsp;โดย  
+            <a href="https://firebase.google.com/">&nbsp;Firebase</a>&nbsp;  
+            ผู้ที่สนใจสามารถดู Code ของโครงงานได้ที่
             <a href="https://github.com/defyMiy/NMT-Project"> Github</a>
             <br/><br/>
             </th>
